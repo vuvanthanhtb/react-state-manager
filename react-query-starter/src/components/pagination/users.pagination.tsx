@@ -19,7 +19,7 @@ const UsersPagination = (props: IProps) => {
               setCurrentPage(currentPage - 1);
             }}
           />
-          {[...Array(totalPages)].map((page, i) => {
+          {[...Array(totalPages)].map((_, i) => {
             return (
               <Pagination.Item
                 key={i}
