@@ -1,5 +1,5 @@
 import Table from "react-bootstrap/Table";
-import { useState, forwardRef } from "react";
+import { useState, forwardRef, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import UserCreateModal from "./modal/user.create.modal";
 import UserEditModal from "./modal/user.edit.modal";
@@ -7,6 +7,9 @@ import UserDeleteModal from "./modal/user.delete.modal";
 import UsersPagination from "./pagination/users.pagination";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
+import { useAppDispatch, useAppSelector } from "../redux/hook";
+import { fetchUsers } from "../redux/user/user.slice";
+import { IUser } from "../model/user.model";
 
 function UsersTable() {
   const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);
@@ -16,23 +19,12 @@ function UsersTable() {
 
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState<boolean>(false);
 
-  const users = [
-    {
-      id: 1,
-      name: "Eric",
-      email: "eric@gmail.com",
-    },
-    {
-      id: 2,
-      name: "Hỏi Dân IT",
-      email: "hoidanit@gmail.com",
-    },
-    {
-      id: 3,
-      name: "Hỏi Dân IT",
-      email: "admin@gmail.com",
-    },
-  ];
+  const dispatch = useAppDispatch();
+  const users: IUser[] = useAppSelector((state) => state.user.users);
+
+  useEffect(() => {
+    dispatch(fetchUsers());
+  });
 
   const handleEditUser = (user: any) => {
     setDataUser(user);
@@ -83,7 +75,7 @@ function UsersTable() {
           </tr>
         </thead>
         <tbody>
-          {users?.map((user) => {
+          {(users || [])?.map((user) => {
             return (
               <tr key={user.id}>
                 <OverlayTrigger
