@@ -24,7 +24,7 @@ function UsersTable() {
 
   useEffect(() => {
     dispatch(fetchUsers());
-  });
+  }, []);
 
   const handleEditUser = (user: any) => {
     setDataUser(user);

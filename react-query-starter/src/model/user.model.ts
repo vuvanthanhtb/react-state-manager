@@ -4,7 +4,7 @@ export interface IUser {
   name: string;
 }
 
-export interface UserCreate {
+export interface IUserCreate {
   email: string;
   name: string;
 }
