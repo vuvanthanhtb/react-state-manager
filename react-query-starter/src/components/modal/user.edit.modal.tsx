@@ -1,8 +1,9 @@
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
-import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import { resetUpdateSuccess, updateUser } from "../../redux/user/user.slice";
 
@@ -28,6 +29,7 @@ const UserEditModal = (props: any) => {
     if (isUpdateSuccess) {
       setIsOpenUpdateModal(false);
       dispatch(resetUpdateSuccess());
+      toast.success("Update user success");
     }
   }, [isUpdateSuccess]);
 

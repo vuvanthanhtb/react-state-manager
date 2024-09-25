@@ -1,11 +1,11 @@
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
-import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import { createNewUser, resetCreateSuccess } from "../../redux/user/user.slice";
-import { toast } from "react-toastify";
 
 const UserCreateModal = (props: any) => {
   const { isOpenCreateModal, setIsOpenCreateModal } = props;

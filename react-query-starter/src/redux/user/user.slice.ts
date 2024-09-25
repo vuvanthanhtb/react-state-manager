@@ -47,16 +47,33 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+export const deleteUser = createAsyncThunk(
+  "users/deleteUser",
+  async (payload: number, thunkAPI) => {
+    const response = await fetch(`${SERVER}/users/${payload}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    thunkAPI.dispatch(fetchUsers());
+    return data;
+  }
+);
+
 export interface IUserState {
   users: Array<IUser>;
   isCreateSuccess: boolean;
   isUpdateSuccess: boolean;
+  isDeleteSuccess: boolean;
 }
 
 const initialState: IUserState = {
   users: [],
   isCreateSuccess: false,
   isUpdateSuccess: false,
+  isDeleteSuccess: false,
 };
 
 export const userSlice = createSlice({
@@ -69,20 +86,28 @@ export const userSlice = createSlice({
     resetUpdateSuccess: (state) => {
       state.isUpdateSuccess = false;
     },
+    resetDeleteSuccess: (state) => {
+      state.isDeleteSuccess = false;
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchUsers.fulfilled, (state, action) => {
-      state.users = action.payload;
-    });
-    builder.addCase(createNewUser.fulfilled, (state, _) => {
-      state.isCreateSuccess = true;
-    });
-    builder.addCase(updateUser.fulfilled, (state, _) => {
-      state.isUpdateSuccess = true;
-    });
+    builder
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.users = action.payload;
+      })
+      .addCase(createNewUser.fulfilled, (state, _) => {
+        state.isCreateSuccess = true;
+      })
+      .addCase(updateUser.fulfilled, (state, _) => {
+        state.isUpdateSuccess = true;
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.isDeleteSuccess = true;
+      });
   },
 });
 
-export const { resetCreateSuccess, resetUpdateSuccess } = userSlice.actions;
+export const { resetCreateSuccess, resetUpdateSuccess, resetDeleteSuccess } =
+  userSlice.actions;
 
 export default userSlice.reducer;
