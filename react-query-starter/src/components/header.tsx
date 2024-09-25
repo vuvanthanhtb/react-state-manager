@@ -1,10 +1,13 @@
+import { useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Form from "react-bootstrap/Form";
-import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../redux/hook";
+import { changeMode } from "../redux/app/mode.slice";
 
 function Header() {
-  const [mode, setMode] = useState("light");
+  const dispatch = useAppDispatch();
+  const mode = useAppSelector((state) => state.mode.mode);
 
   useEffect(() => {
     const body = document.querySelector("body");
@@ -20,7 +23,7 @@ function Header() {
           <Form.Check
             defaultChecked={mode === "light" ? false : true}
             onChange={(e) => {
-              setMode(e.target.checked === true ? "dark" : "light");
+              dispatch(changeMode(e.target.checked ? "dark" : "light"));
             }}
             type="switch"
             id="custom-switch"

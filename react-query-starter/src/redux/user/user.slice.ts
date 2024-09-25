@@ -101,7 +101,7 @@ export const userSlice = createSlice({
       .addCase(updateUser.fulfilled, (state, _) => {
         state.isUpdateSuccess = true;
       })
-      .addCase(deleteUser.fulfilled, (state, action) => {
+      .addCase(deleteUser.fulfilled, (state, _) => {
         state.isDeleteSuccess = true;
       });
   },
