@@ -8,7 +8,7 @@ import { ToastContainer } from "react-toastify";
 import { Provider } from "react-redux";
 
 import App from "./App.tsx";
-import { persistor, store } from "./redux/store";
+import { persistor, store } from "./redux/store.ts";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
