@@ -3,13 +3,18 @@ import Modal from "react-bootstrap/Modal";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import { useState, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
+import { resetUpdateSuccess, updateUser } from "../../redux/user/user.slice";
 
 const UserEditModal = (props: any) => {
   const { isOpenUpdateModal, setIsOpenUpdateModal, dataUser } = props;
-  const [id, setId] = useState();
+  const [id, setId] = useState<number>(-1);
 
   const [email, setEmail] = useState<string>("");
   const [name, setName] = useState<string>("");
+
+  const dispatch = useAppDispatch();
+  const isUpdateSuccess = useAppSelector((state) => state.user.isUpdateSuccess);
 
   useEffect(() => {
     if (dataUser?.id) {
@@ -18,6 +23,13 @@ const UserEditModal = (props: any) => {
       setName(dataUser?.name);
     }
   }, [dataUser]);
+
+  useEffect(() => {
+    if (isUpdateSuccess) {
+      setIsOpenUpdateModal(false);
+      dispatch(resetUpdateSuccess());
+    }
+  }, [isUpdateSuccess]);
 
   const handleSubmit = () => {
     if (!email) {
@@ -28,7 +40,8 @@ const UserEditModal = (props: any) => {
       alert("name empty");
       return;
     }
-    console.log({ email, name, id });
+
+    dispatch(updateUser({ id, email, name }));
   };
 
   return (
