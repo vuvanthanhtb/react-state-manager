@@ -1,11 +1,28 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
+import { deleteBlog } from "../../redux/blog/blog.slice";
+import { resetDeleteSuccess } from "../../redux/user/user.slice";
 
 const BlogDeleteModal = (props: any) => {
   const { dataBlog, isOpenDeleteModal, setIsOpenDeleteModal } = props;
 
+  const dispatch = useAppDispatch();
+  const isDeleteSuccess = useAppSelector((state) => state.blog.isDeleteSuccess);
+
+  useEffect(() => {
+    if (isDeleteSuccess) {
+      setIsOpenDeleteModal(false);
+      resetDeleteSuccess();
+      toast.success("Delete blog successfully");
+    }
+  }, [isDeleteSuccess]);
+
   const handleSubmit = () => {
-    console.log({ id: dataBlog?.id });
+    dispatch(deleteBlog(dataBlog?.id));
   };
 
   return (

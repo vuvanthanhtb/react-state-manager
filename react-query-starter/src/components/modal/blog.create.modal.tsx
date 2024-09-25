@@ -2,7 +2,11 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
-import { useState } from "react";
+import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
+import { createNewBlog } from "../../redux/blog/blog.slice";
+import { resetCreateSuccess } from "../../redux/user/user.slice";
 
 const BlogCreateModal = (props: any) => {
   const { isOpenCreateModal, setIsOpenCreateModal } = props;
@@ -10,6 +14,17 @@ const BlogCreateModal = (props: any) => {
   const [title, setTitle] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
   const [content, setContent] = useState<string>("");
+
+  const dispatch = useAppDispatch();
+  const isCreateSuccess = useAppSelector((state) => state.blog.isCreateSuccess);
+
+  useEffect(() => {
+    if (isCreateSuccess) {
+      setIsOpenCreateModal(false);
+      resetCreateSuccess();
+      toast.success("Create new blog successfully");
+    }
+  }, [isCreateSuccess]);
 
   const handleSubmit = () => {
     if (!title) {
@@ -24,8 +39,7 @@ const BlogCreateModal = (props: any) => {
       alert("content empty");
       return;
     }
-    //call api => call redux
-    console.log({ title, author, content }); //payload
+    dispatch(createNewBlog({ title, author, content }));
   };
 
   return (

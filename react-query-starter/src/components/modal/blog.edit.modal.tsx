@@ -1,16 +1,24 @@
+import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
-import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
+import { updateBlog } from "../../redux/blog/blog.slice";
+import { resetUpdateSuccess } from "../../redux/user/user.slice";
 
 const BlogEditModal = (props: any) => {
   const { isOpenUpdateModal, setIsOpenUpdateModal, dataBlog } = props;
-  const [id, setId] = useState();
+  const [id, setId] = useState<number>(-1);
 
   const [title, setTitle] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
   const [content, setContent] = useState<string>("");
+
+  const dispatch = useAppDispatch();
+  const isUpdateSuccess = useAppSelector((state) => state.blog.isUpdateSuccess);
 
   useEffect(() => {
     if (dataBlog?.id) {
@@ -20,6 +28,14 @@ const BlogEditModal = (props: any) => {
       setContent(dataBlog?.content);
     }
   }, [dataBlog]);
+
+  useEffect(() => {
+    if (isUpdateSuccess) {
+      setIsOpenUpdateModal(false);
+      resetUpdateSuccess();
+      toast.success("Update blog successfully");
+    }
+  }, [isUpdateSuccess]);
 
   const handleSubmit = () => {
     if (!title) {
@@ -34,7 +50,7 @@ const BlogEditModal = (props: any) => {
       alert("content empty");
       return;
     }
-    console.log({ title, author, content, id });
+    dispatch(updateBlog({ id, title, author, content }));
   };
 
   return (
