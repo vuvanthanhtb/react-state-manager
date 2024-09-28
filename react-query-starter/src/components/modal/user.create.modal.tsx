@@ -8,6 +8,7 @@ import Button from "react-bootstrap/Button";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 
 import { SERVER } from "@/configs/env.constants";
+import { QUERY_KEY } from "@/configs/keys.config";
 import { IUserCreate } from "@/model/user.model";
 import SpinnerComponent from "@/components/spinner";
 
@@ -46,7 +47,9 @@ const UserCreateModal: React.FC<IUserCreateProps> = (
       toast.success("Create user successfully");
       setEmail("");
       setName("");
-      queryClient.invalidateQueries({ queryKey: ["fetchUsers"] });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEY.getUserPagination(),
+      });
     },
   });
 

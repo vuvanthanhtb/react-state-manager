@@ -7,9 +7,11 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 
+import SpinnerComponent from "@/components/spinner";
+
 import { IUser } from "@/model/user.model";
 import { SERVER } from "@/configs/env.constants";
-import SpinnerComponent from "@/components/spinner";
+import { QUERY_KEY } from "@/configs/keys.config";
 
 interface IUserEditProps {
   dataUser: IUser | undefined;
@@ -44,7 +46,9 @@ const UserEditModal: React.FC<IUserEditProps> = (props: IUserEditProps) => {
     onSuccess: () => {
       setIsOpenUpdateModal(false);
       toast.success("Update user successfully");
-      queryClient.invalidateQueries({ queryKey: ["fetchUsers"] });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEY.getUserPagination(),
+      });
     },
   });
 

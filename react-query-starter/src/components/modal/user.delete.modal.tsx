@@ -5,7 +5,9 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 
 import SpinnerComponent from "@/components/spinner";
+
 import { SERVER } from "@/configs/env.constants";
+import { QUERY_KEY } from "@/configs/keys.config";
 import { IUser } from "@/model/user.model";
 
 interface IUserDeleteProps {
@@ -35,7 +37,9 @@ const UserDeleteModal: React.FC<IUserDeleteProps> = (
     onSuccess: () => {
       setIsOpenDeleteModal(false);
       toast.success("Delete user successfully");
-      queryClient.invalidateQueries({ queryKey: ["fetchUsers"] });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEY.getUserPagination(),
+      });
     },
   });
 

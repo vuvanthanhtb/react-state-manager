@@ -3,7 +3,7 @@ import { useState, forwardRef } from "react";
 import Button from "react-bootstrap/Button";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 import SpinnerComponent from "@/components/spinner";
 import UserCreateModal from "@/components/modal/user.create.modal";
@@ -13,6 +13,7 @@ import TablePagination from "@/components/pagination/table.pagination";
 import { SERVER } from "@/configs/env.constants";
 import { IUser } from "@/model/user.model";
 import { PAGE_SIZE } from "@/configs/app.constants";
+import { QUERY_KEY } from "@/configs/keys.config";
 
 function UsersTable() {
   const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);
@@ -28,7 +29,7 @@ function UsersTable() {
   const pageSize: number = PAGE_SIZE;
 
   const { isPending, error, data } = useQuery({
-    queryKey: ["fetchUsers", currentPage],
+    queryKey: QUERY_KEY.getUserPagination(currentPage),
     queryFn: (): Promise<IUser[]> =>
       fetch(`${SERVER}/users?_page=${currentPage}&_limit=${pageSize}`).then(
         (res) => {
@@ -36,11 +37,12 @@ function UsersTable() {
           const totalPagesTemp: number =
             totalItems === 0 ? 0 : (totalItems - 1) / pageSize + 1;
           setTotalPages(totalPagesTemp);
+          setCurrentPage(currentPage);
           return res.json();
         }
       ),
-    // staleTime: 3 * 1000,
-    // placeholderData: keepPreviousData,
+    staleTime: 0.3 * 1000,
+    placeholderData: keepPreviousData,
   });
 
   if (error) return "An error has occurred: " + error.message;
