@@ -1,3 +1,4 @@
+import { IAuthLogin } from "./../../models/auth.model";
 import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IUser, IUserCreate } from "@/models/user.model";
 
@@ -22,6 +23,9 @@ const initialState: UserState = {
   isUpdateSuccess: false,
   isDeleteSuccess: false,
 };
+
+export const loginPending = createAction<IAuthLogin>("loginPending");
+export const logout = createAction("logout");
 
 export const fetchUsersPending = createAction("fetchUsersPending");
 export const fetchUsersSuccess = createAction<IUser[]>("fetchUsersSuccess");

@@ -1,16 +1,22 @@
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import FloatingLabel from "react-bootstrap/FloatingLabel";
-import Container from "react-bootstrap/Container";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { useState } from "react";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
-import { Link } from "react-router-dom";
+import Container from "react-bootstrap/Container";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+
+import { useAppDispatch } from "@/redux/hooks";
+import { loginPending } from "@/redux/user";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const dispatch = useAppDispatch();
 
   const handleSubmit = () => {
     if (!email) {
@@ -21,7 +27,7 @@ const LoginPage = () => {
       alert("Empty password @@");
       return;
     }
-    console.log(">>> check submit: ", { email, password });
+    dispatch(loginPending({ email, password }));
   };
 
   return (
